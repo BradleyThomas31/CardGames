@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 import java.util.Random;
 
 public class Deck {
@@ -37,7 +38,7 @@ public class Deck {
 
 	public void chooseGame() {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("What game would you like to play?\n Blackjack (A)\n Other (B)");
+		System.out.println("What game would you like to play?\nBlackjack (A)\nOther (B)");
 		String input = scan.nextLine();
 		if (input.equals("A")) {
 			playBlackJack();
@@ -54,16 +55,16 @@ public class Deck {
 		boolean endGame = false;
 		
 		while(endGame == false) {
-			System.out.println("\n\nYour cards:");
-			for (int i = 0; i < playerHand.length; i++) {
-				System.out.println(playerHand[i].getRank() + " of " + playerHand[i].getSuit());
-			}
+			System.out.println("-------------------------------");
+			System.out.println("\nYour cards:");
+			printHand(playerHand);
+			
 			System.out.println("\nDealer's cards:");
-			for (int i = 0; i< dealerHand.length; i++) {
+			for (int i = 0; i< dealerHand.length-1; i++) {
 				System.out.println(dealerHand[i].getRank() + " of " + dealerHand[i].getSuit());
 			}
 			
-			System.out.println("Hit Me! (A) \n Hold (B)");
+			System.out.println("\n\nHit Me! (A) \nHold (B)");
 			String input = sc.nextLine();
 			
 			if (input.equals("A")) {
@@ -78,10 +79,76 @@ public class Deck {
 				endGame = true;	
 		}
 		
+		System.out.println("-------------------------------");
+		System.out.println("\nYour Hand:");
+		printHand(playerHand);
+		System.out.println("\nDealer's Hand:");
+		printHand(dealerHand);
+		
 		//add them up
-		System.out.println("you won");
+		int playerValue = addCardValuesBJ(playerHand);
+		int dealerValue = addCardValuesBJ(dealerHand);
+		
+		if(playerValue > 21)
+			System.out.println("\nBust!");
+		else if(playerValue > dealerValue)
+			System.out.println("\nYou Win!");
+		else
+			System.out.println("\nYou Lose");
 	}
 
+	public int addCardValuesBJ(Card myCards[]) {
+		int handValue = 0;
+		for(int i = 0; i < myCards.length; i++) {
+			switch(myCards[i].getRank()) {
+			case "Ace":
+				handValue += 1;
+				break;
+			case "Two" :
+				handValue += 2;
+				break;
+			case "Three" :
+				handValue += 3;
+				break;
+			case "Four" :
+				handValue += 4;
+				break;
+			case "Five" :
+				handValue += 5;
+				break;
+			case "Six" :
+				handValue += 6;
+				break;
+			case "Seven" :
+				handValue += 7;
+				break;
+			case "Eight" :
+				handValue += 8;
+				break;
+			case "Nine" :
+				handValue += 9;
+				break;
+			case "Ten" :
+				handValue += 10;
+				break;
+			case "Jack" :
+			case "King" :
+			case "Queen" :
+				handValue += 11;
+				break;
+			default :
+				handValue -= 1000;
+			}
+		}
+		return handValue;
+	}
+	
+	public void printHand(Card[] myHand) {
+		for (int i = 0; i < myHand.length; i++) {
+			System.out.println(myHand[i].getRank() + " of " + myHand[i].getSuit());
+		}
+	}
+	
 	public Card takeCard() {
 		Card myCard = cards[0];
 		for (int i = 1; i < cards.length; i++) {
